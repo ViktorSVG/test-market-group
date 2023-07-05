@@ -43,6 +43,14 @@ window.VacationModal = /*#__PURE__*/function () {
       this.modal = new bootstrap__WEBPACK_IMPORTED_MODULE_0__.Modal('#vacation-modal', {
         keyboard: false
       });
+      var from = this.modalEl.querySelector('input[name="date_from"]'),
+        to = this.modalEl.querySelector('input[name="date_to"]');
+      from.addEventListener('change', function () {
+        to.min = this.value;
+      });
+      to.addEventListener('change', function () {
+        from.max = this.value;
+      });
     }
     if (vacationTable) {
       vacationTable.addEventListener('click', function (e) {
@@ -81,19 +89,29 @@ window.VacationModal = /*#__PURE__*/function () {
     value: function initDate() {
       var from = this.modalEl.querySelector('input[name="date_from"]'),
         to = this.modalEl.querySelector('input[name="date_to"]'),
-        row = this.modalEl.querySelector('input[name="id"]');
+        row = this.modalEl.querySelector('input[name="id"]'),
+        pad = function pad(number) {
+          if (number < 10) {
+            return '0' + number;
+          }
+          return number;
+        };
+      from.min = new Date().getUTCFullYear() + '-01-01';
       if (!this.rowId) {
-        from.min = '';
-        from.max = '';
-        from.value = '';
-        to.min = '';
+        var date = new Date(),
+          dateStr = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1) + '-' + pad(date.getUTCDate());
+        from.max = dateStr;
+        from.value = dateStr;
+        to.min = dateStr;
         to.max = '';
-        to.value = '';
+        to.value = dateStr;
         row.value = '0';
         return;
       }
       from.value = this.dateFrom;
+      from.max = this.dateTo;
       to.value = this.dateTo;
+      to.min = this.dateFrom;
       row.value = this.rowId;
     }
   }, {

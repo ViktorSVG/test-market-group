@@ -13,7 +13,8 @@ class HomeController extends Controller
     public function index(Request $request, $year = null) : \Illuminate\Contracts\Support\Renderable
     {
         $current = (int)$year ?: date('Y');
-        $years = range(date('Y') - 4, date('Y') + 1, 1);
+        $current = in_array($current, [date('Y'), date('Y') + 1]) ? $current : date('Y');
+        $years = range(date('Y'), date('Y') + 1, 1);
         $users = User::allYearVacations($current);
         $errors = $request->session()->has('errors') ? $request->session()->get('errors') : [];
         $success = $request->session()->has('success') ? $request->session()->get('success') : null;
@@ -38,6 +39,11 @@ class HomeController extends Controller
         ]);
         $validator->after(function($validator){
             $data = $validator->getData();
+            if ((int)date_create($data['date_from'])->format('Y') < (int)date('Y')) {
+                $validator->errors()->add(
+                    'no-field', 'Дата начала отпуска не может быть раньше начала текущего года!'
+                );
+            }
             if ((int)date_diff(date_create($data['date_from']), date_create($data['date_to']))->format('%r%a') < 0) {
                 $validator->errors()->add(
                     'no-field', 'Дата начала отпуска не может быть позже даты окончания отпуска!'

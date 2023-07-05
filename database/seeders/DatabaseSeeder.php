@@ -40,10 +40,6 @@ class DatabaseSeeder extends Seeder
             [ 'roles_id' => 'employee', 'positions_id'=>'accountant', 'name' => 'Копейкина С. А.','email' => 'user-2@company.com', 'password' => bcrypt('user-2@company.com'), 'date_of_employment' => (new \DateTime())->sub(new \DateInterval('P2Y5M'))->format('Y-m-d'),
                 'vacation' => [
                     [
-                        'date_from' => (new \DateTime())->sub(new \DateInterval('P1Y3M'))->format('Y-m-d'),
-                        'date_to' => (new \DateTime())->sub(new \DateInterval('P1Y3M'))->add(new \DateInterval('P21D'))->format('Y-m-d')
-                    ],
-                    [
                         'date_from' => (new \DateTime())->sub(new \DateInterval('P3M'))->format('Y-m-d'),
                         'date_to' => (new \DateTime())->sub(new \DateInterval('P3M'))->add(new \DateInterval('P10D'))->format('Y-m-d')
                     ],
